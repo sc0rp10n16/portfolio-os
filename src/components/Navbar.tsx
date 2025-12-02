@@ -6,7 +6,8 @@ const Navbar = () => {
         <nav className="rounded-full  m-2">
             <div>
                 <img src="/images/logo.svg" alt="logo" />
-                <p className="font-bold">Akshith's OS</p>
+                <p className="font-bold">SC0RP10N16'S PC
+                </p>
                 <ul>
                     {navLinks.map(({id, name}) => (
                         <li key={id}>
@@ -19,7 +20,7 @@ const Navbar = () => {
                 <ul>
                     {navIcons.map(({id, img}) => (
                         <li key={id} >
-                            <img src={img} className="hover:cursor-pointer hover:hover:bg-white/30 p-1 rounded-full" alt={`icon-${img}`} />
+                            <img src={img} className="hover:cursor-pointer hover:bg-white/30 p-1 rounded-full" alt={`icon-${img}`} />
                         </li>
                     ))}
 
