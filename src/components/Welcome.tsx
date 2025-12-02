@@ -16,35 +16,39 @@ const renderText = (text: string, className: string | undefined, baseWeight = 40
     ))
 }
 
-const setupTextHover = (container, type) => {
-    if(!container) return;
+const setupTextHover = (
+    container: HTMLElement | null,
+    type: keyof typeof FONT_WEIGHTS
+): (() => void) | undefined => {
+    if (!container) return undefined;
 
-    const letters = container.querySelectorAll("span");
+    const letters = container.querySelectorAll("span") as NodeListOf<HTMLElement>;
 
-    const {min, max, default: base} = FONT_WEIGHTS[type];
+    const { min, max, default: base } = FONT_WEIGHTS[type];
 
-    const animateLetter = (letter: gsap.TweenTarget, weight: any, duration = 0.25) => {
+    const animateLetter = (letter: HTMLElement, weight: number, duration = 0.25) => {
         return gsap.to(letter, {
             duration,
             ease: "power2.out",
             fontVariationSettings: `'wght' ${weight}`,
-        })
-    }
+        });
+    };
 
-    const handleMouseMove = (e) =>{
-        const {left} = container.getBoundingClientRect();
+    const handleMouseMove = (e: MouseEvent) => {
+        const { left } = container.getBoundingClientRect();
         const mouseX = e.clientX - left;
 
         letters.forEach((letter) => {
-            const {left: l, width: w} = letter.getBoundingClientRect();
-            const distance = Math.abs(mouseX - (l-left+w/2));
-            const intensity = Math.exp(-(distance**2)/20000);
+            const { left: l, width: w } = letter.getBoundingClientRect();
+            const distance = Math.abs(mouseX - (l - left + w / 2));
+            const intensity = Math.exp(-(distance ** 2) / 20000);
 
-            animateLetter(letter, min+(max-min) * intensity);
-        })
-    }
+            animateLetter(letter, min + (max - min) * intensity);
+        });
+    };
+
     const handleMouseLeave = () =>
-        letters.forEach((letter)=> animateLetter(letter, base, 0.3))
+        letters.forEach((letter) => animateLetter(letter, base, 0.3));
 
     container.addEventListener("mousemove", handleMouseMove);
     container.addEventListener("mouseleave", handleMouseLeave);
@@ -52,12 +56,12 @@ const setupTextHover = (container, type) => {
     return () => {
         container.removeEventListener("mousemove", handleMouseMove);
         container.removeEventListener("mouseleave", handleMouseLeave);
-    }
+    };
 }
 
 const Welcome = () => {
-    const titleRef = useRef(null)
-    const subtitleRef = useRef(null)
+    const titleRef = useRef<HTMLElement | null>(null)
+    const subtitleRef = useRef<HTMLElement | null>(null)
 
     useGSAP(()=> {
         
@@ -65,8 +69,8 @@ const Welcome = () => {
         const subtitleCleanup = setupTextHover(subtitleRef.current, 'subtitle')
 
         return () => {
-            subtitleCleanup();
-            titleCleanup();
+            if (subtitleCleanup) subtitleCleanup();
+            if (titleCleanup) titleCleanup();
         }
     })
 

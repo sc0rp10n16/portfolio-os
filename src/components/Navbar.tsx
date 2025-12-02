@@ -20,7 +20,7 @@ const Navbar = () => {
                 <ul>
                     {navIcons.map(({id, img}) => (
                         <li key={id} >
-                            <img src={img} className="hover:cursor-pointer hover:hover:bg-white/30 p-1 rounded-full" alt={`icon-${img}`} />
+                            <img src={img} className="hover:cursor-pointer hover:bg-white/30 p-1 rounded-full" alt={`icon-${img}`} />
                         </li>
                     ))}
 
